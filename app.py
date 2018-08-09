@@ -14,6 +14,9 @@ from flask_jsglue import JSGlue
 from flask_pymongo import PyMongo
 from config import SECRET_KEY, dbConfig
 
+
+from views.index import indexViews
+
 app = Flask(__name__, template_folder="templates")
 app.secret_key = SECRET_KEY
 
@@ -22,6 +25,8 @@ app.config.update(
     MONGO_USERNAME=dbConfig["UserName"],
     MONGO_PASSWORD=dbConfig["Pwd"]
 )
+
+app.register_blueprint(indexViews)
 
 jsglue = JSGlue(app)
 mongo = PyMongo(app)
