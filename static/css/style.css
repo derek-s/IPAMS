@@ -1,0 +1,87 @@
+body {
+    width: 100%;
+    background-color: #fff;
+    margin: 0 auto;
+    font-size: 14px;
+    height: 100%;
+    display: block;
+}
+
+html {
+    height: 100%;
+}
+
+body,h1,h2,h3,h4,h5,h6,input,p,span{
+    font-family: "Microsoft YaHei", "TIBch", "Classic Grotesque W01", "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "WenQuanYi Micro Hei", SimSun, sans-serif;
+    margin: 0;
+}
+
+.clear {
+    clear: both;
+}
+#nav {
+    width: 100%;
+    background-color: #000000;
+    height: 65px;
+    position: fixed;
+}
+.nav_Block {
+    width: 1280px;
+    margin: 0 auto;
+    padding: 10px 0 0 0;
+}
+.nav_Child {
+    list-style: none;
+    display: inline;
+}
+
+.nav_Logo {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+    display: block;
+    float: left;
+}
+
+.nav_List {
+    display: block;
+    float: right;
+}
+
+.nav_List a {
+    font-size: 14px;
+    font-weight: 400;
+    color: #000;
+    text-decoration: none;
+}
+
+.nav_Logo > a {
+    color: #fff;
+}
+.nav_Logo > a:hover {
+    color: #337ab7;
+}
+ul.menu {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+#content {
+    width: 1280px;
+    margin: 0 auto;
+    display: block;
+    padding-top: 70px;
+}
+
+#search {
+    display: inline;
+}
+.Search_label {
+    font-weight: normal;
+    vertical-align: top;
+}
+.selectTop {
+    vertical-align: top;
+}
+#funMenu {
+    display: inline;
+}
