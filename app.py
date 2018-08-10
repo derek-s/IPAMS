@@ -15,18 +15,13 @@ from flask_pymongo import PyMongo
 from config import SECRET_KEY, dbConfig
 
 
-from views.index import indexViews
-
 app = Flask(__name__, template_folder="templates")
 app.secret_key = SECRET_KEY
 
 app.config.update(
-    MONGO_URI=dbConfig["URI"],
-    MONGO_USERNAME=dbConfig["UserName"],
-    MONGO_PASSWORD=dbConfig["Pwd"]
+    MONGO_URI=dbConfig["URI"]
 )
 
-app.register_blueprint(indexViews)
 
 jsglue = JSGlue(app)
 mongo = PyMongo(app)
@@ -36,6 +31,3 @@ app.jinja_env.auto_reload = True
 bootstrap = Bootstrap(app)
 CSRFProtect(app)
 
-
-if __name__ == '__main__':
-    app.run(host="127.0.0.1", port=5000, debug=True)
