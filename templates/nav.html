@@ -3,7 +3,8 @@
         <div class="nav_Logo"><a href="{{url_for('indexViews.indexPage')}}">IPSAM</a></div>
         <div class="nav_List">
             <ul class="menu">
-                <li class="nav_Child"><form id="search" method="get" action="{{url_for('indexViews.Search')}}">
+                <li class="nav_Child">
+                    <form id="search" method="get" action="{{url_for('indexViews.Search')}}">
                     <label type="text" class="Search_label">
                         <input type="text" class="form-control" name="keyword" placeholder="输入关键字搜索">
                     </label>
