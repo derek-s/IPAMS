@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block title %}IPSAM{% endblock %}{% block content -%}
+<div id="content_layer">
+    <label for="limitInput">分页数量</label>
+    <input type="text" id="limitInput" value="{{ data.limitNum }}" onkeyup="value=value.replace(/[^\d.]/g,'')">
+    <button onclick="javascript:saveOption()" class="btn btn-primary" >保存设置</button>
+</div>
+{%- endblock -%}
