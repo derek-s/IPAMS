@@ -8,9 +8,12 @@
 from app import app
 from views.index import indexViews
 from views.bgViews import bgViews
+from views.sysoption import sysOption
 
 app.register_blueprint(bgViews)
 app.register_blueprint(indexViews)
+app.register_blueprint(sysOption)
+
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=5000, debug=True)
