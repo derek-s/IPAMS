@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block title %}IPSAM{% endblock %}{% block content -%}{% include "nav.html" %}
+<div id="content">
+    <div class="pTable">
+        <div class="pTable_head">
+            <table class="table table-hover p_fixed">
+                <thead>
+                    <tr>
+                        <th>
+                            <input id="checkboxall" type="checkbox" name="oper_all">
+                        </th>
+                        <th>
+                            省/直辖市/自治区
+                        </th>
+                        <th>
+                            地市州
+                        </th>
+                        <th>
+                            操作
+                        </th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="pTable_body">
+            <table class="table table-hover p_fix_down">
+                <tbody>
+                    {% for pData in pDatas %}
+                    <tr>
+                        <td><input id="oper" type="checkbox" name="oper" value="1" /></td>
+                        <td>{{ pData.Provinces }}</td>
+                        <td>{{ pData.City }}</td>
+                        <td>管理 | 删除</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div>
+                {%if pagination%} {{macros.pagination_widget(pagination,'sysOption.provinces')}} {%endif%}
+            </div>
+    </div>
+</div>
+{%- endblock -%}

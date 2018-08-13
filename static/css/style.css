@@ -34,6 +34,7 @@ span {
     background-color: #000000;
     height: 65px;
     position: fixed;
+    z-index: 999999;
 }
 
 .nav_Block {
@@ -84,7 +85,7 @@ ul.menu {
     width: 1280px;
     margin: 0 auto;
     display: block;
-    padding-top: 70px;
+    padding-top: 65px;
 }
 
 #search {
@@ -116,4 +117,28 @@ tr.provinces_trinput > td {
 .provinces_ntr {
     display: block;
     margin: 20px 0;
+}
+.p_fixed {
+    position: fixed;
+    width: 1280px;
+    background: white;
+    color: black;
+}
+.p_fix_down {
+    padding-top: 20px;
+    width: 1280px;
+}
+.pTable_head {
+    display: block;
+    position: absolute;
+    z-index: 999998;
+}
+.pTable_body {
+    position: absolute;
+    margin-top: 35px;
+}
+table.p_fixed > thead > tr > th,
+table.p_fix_down > tbody > tr > td {
+    width: 25%;
+    text-align: center;
 }
