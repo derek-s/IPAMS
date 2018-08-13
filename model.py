@@ -6,7 +6,14 @@
 # @File    : model.py
 
 from app import mongo
+from flask_pymongo import DESCENDING
+
+
+from math import ceil
 import json
+
+
+limitNum = int(mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"])
 
 
 def init_idRecode():
@@ -43,6 +50,7 @@ def setLimit(limit=20):
     设置分页参数
     :param limit: int limit num
     :return: None
+    TODO: 需要修改一下更新方式，现在都是插入
     """
     limitDict = {
         "limit": limit
@@ -65,6 +73,7 @@ def getSystem():
     """
     取系统设置参数
     :return:  int limit num
+    TODO: 跟随setLimit函数同步修改
     """
     option = {}
     try:
@@ -96,5 +105,34 @@ def setProvinces(ProvincesData):
     return json.dumps(status)
 
 
+def provincesViews(pageNum):
+    """
+    查看行政区划数据
+    :return:
+    """
+    try:
+        offset = (int(pageNum) - 1) * limitNum
+        provincesData = mongo.db.IPRMS_Provinces.find({}).sort("_id").limit(limitNum).skip(offset)
+        if(provincesData.count() > offset):
+            return provincesData
+        else:
+            return 0
+    except Exception as e:
+        print(e)
+
+
 def getIPRes():
     pass
+
+
+def pagination(collectionName):
+    """
+    分页
+    :param collectionName:
+    :return:
+    """
+
+    col = str(collectionName)
+    total = mongo.db[col].count()
+    offset = list(range(1, ceil(total/limitNum) + 1))
+    return offset
