@@ -6,8 +6,8 @@
 # @File    : sysoption.py
 
 
-from flask import Blueprint, render_template, request
-from model import getSystem, setLimit, setProvinces
+from flask import Blueprint, render_template, request, abort
+from model import getSystem, setLimit, setProvinces, provincesViews, pagination
 
 
 sysOption = Blueprint("sysOption", __name__)
@@ -28,6 +28,23 @@ def systemOption():
         return setLimit(limitNum)
 
 
+@sysOption.route("/system/provinces", methods=['GET'])
+def provincesView():
+    """
+    行政区划视图
+    :return:
+    """
+    if(request.method == "GET"):
+        pageNum = int(request.args.get("page", 1))
+        pDatas = provincesViews(pageNum)
+        if(pDatas):
+            return render_template("provinces.html", pDatas=pDatas)
+        else:
+            abort(404)
+    elif(request.method == "POST"):
+        abort(400)
+
+
 @sysOption.route("/system/provinces/add", methods=['GET', 'POST'])
 def provinces():
     """
@@ -35,7 +52,7 @@ def provinces():
     :return:
     """
     if(request.method == "GET"):
-        return render_template("provinesadd.html")
+        return render_template("provincesadd.html")
     elif(request.method == "POST"):
         pData = request.get_json()
         return setProvinces(pData)
