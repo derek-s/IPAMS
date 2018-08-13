@@ -65,22 +65,22 @@ function saveOption() {
 }
 
 function pCopy(domObj) {
-    var base = $("table#provines_table > tbody")
-    var oLineFind = $(domObj).parents("tr.provines_ntr")
+    var base = $("table#provinces_table > tbody")
+    var oLineFind = $(domObj).parents("tr.provinces_ntr")
     var oCopyLine = oLineFind.clone()
     base.append(oCopyLine) 
 }
 
 function pDel(domObj) {
-    if($("tr.provines_ntr").length === 1){
+    if($("tr.provinces_ntr").length === 1){
         alert("只有1行时不得删除")
     }else{
-        $(domObj).parents("tr.provines_ntr").remove()
+        $(domObj).parents("tr.provinces_ntr").remove()
     }
 }
 
-function provinesPush() {
-    var trList = $("td.provines_ntd")
+function provincesPush() {
+    var trList = $("td.provinces_ntd")
     var pDatas = []
     trList.each(function(){
         var pData = {}

@@ -108,12 +108,12 @@ ul.menu {
     padding: 10px;
 }
 
-tr.provines_trh > th,
-tr.provines_trinput > td {
+tr.provinces_trh > th,
+tr.provinces_trinput > td {
     padding: 0 20px;
 }
 
-.provines_ntr {
+.provinces_ntr {
     display: block;
     margin: 20px 0;
 }
