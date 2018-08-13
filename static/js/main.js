@@ -19,6 +19,14 @@ $(document).ready(
     }
 )
 
+function isNull( str ){
+    if ( str == "" ) return true
+    var regu = "^[ ]+$"
+    var re = new RegExp(regu)
+    return re.test(str)
+    }
+
+
 function systemOptionLayer() {
     var url = Flask.url_for("sysOption.systemOption")
     layer_sysOpt = layer.open(
@@ -54,4 +62,65 @@ function saveOption() {
             }
         }
     })
+}
+
+function pCopy(domObj) {
+    var base = $("table#provines_table > tbody")
+    var oLineFind = $(domObj).parents("tr.provines_ntr")
+    var oCopyLine = oLineFind.clone()
+    base.append(oCopyLine) 
+}
+
+function pDel(domObj) {
+    if($("tr.provines_ntr").length === 1){
+        alert("只有1行时不得删除")
+    }else{
+        $(domObj).parents("tr.provines_ntr").remove()
+    }
+}
+
+function provinesPush() {
+    var trList = $("td.provines_ntd")
+    var pDatas = []
+    trList.each(function(){
+        var pData = {}
+        pData["Provinces"] = $(this).find("input#input_province").val()
+        pData["City"] = $(this).find("input#input_city").val()
+        pDatas.push(pData)
+    })
+    if(pDataCheck(pDatas)){
+        if(confirm('准备添加数据，是否继续？')){
+            $.ajax({
+                url: Flask.url_for('sysOption.provinces'),
+                type: "post",
+                data: JSON.stringify(pDatas),
+                datatype: "json",
+                contentType: "application/json",
+                success: function(data){
+                    data = JSON.parse(data)
+                    if(data.status == 1){
+                        alert("添加成功")
+                        parent.layer.closeAll()
+                    }
+                    else{
+                        alert("添加失败")
+                    }
+                }
+            })
+        }
+    }
+}
+
+function pDataCheck(pDatas) {
+    for (x in pDatas){
+        if (isNull(pDatas[x].Provinces)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+        if (isNull(pDatas[x].City)) {
+            alert("存在未填写项，请核对数据。")
+            return false
+        }
+    }
+    return true
 }

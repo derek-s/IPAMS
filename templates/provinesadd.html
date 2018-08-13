@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% block title %}IPSAM{% endblock %}{% block content -%}
+<div id="content_layer">
+    <label>省市区信息管理</label>
+    <div id="provines_block">
+        <table id="provines_table">
+            <tbody>
+                <tr class="provines_ntr">
+                    <td class="provines_ntd">
+                            <table class="provines_nLine">
+                                    <thead>
+                                        <tr class="provines_trh">
+                                            <th>省/直辖市/自治区</th>
+                                            <th>地级市</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="provines_trinput">
+                                            <td>
+                                                <input type="text" id="input_province">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="input_city">
+                                            </td>
+                                            <td>
+                                                <a class="addspan">
+                                                    <button class="glyphicon glyphicon-plus" aria-hidden="true" onclick="javascript:pCopy(this)"></button>
+                                                </a>
+                                                <a class="delspan">
+                                                    <button class="glyphicon glyphicon-minus" aria-hidden="true" onclick="javascript:pDel(this)"></button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-primary" onclick="javascript:provinesPush()">添加数据</button>
+    </div>
+</div>
+{%- endblock -%}
