@@ -55,7 +55,7 @@ def setLimit(limit=20):
         }
     except:
         status = {
-            "status": 1,
+            "status": 0,
             "msg": "操作失败"
         }
     return json.dumps(status)
@@ -73,6 +73,27 @@ def getSystem():
     except Exception as e:
         print(e)
     return option
+
+
+def setProvinces(ProvincesData):
+    """
+    添加行政区划信息 仅支持到地市一级
+    :param ProvincesData: Dict Data
+    :return:
+    """
+    try:
+        mongo.db.IPRMS_Provinces.insert_many(ProvincesData)
+        status = {
+            "status": 1,
+            "msg": "操作成功"
+        }
+    except Exception as e:
+        print(e)
+        status = {
+            "status": 0,
+            "msg": "操作失败"
+        }
+    return json.dumps(status)
 
 
 def getIPRes():

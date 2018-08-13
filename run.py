@@ -7,7 +7,7 @@
 
 from app import app
 from views.index import indexViews
-from views.bgViews import bgViews
+from views.bgviews import bgViews
 from views.sysoption import sysOption
 
 app.register_blueprint(bgViews)
