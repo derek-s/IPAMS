@@ -124,3 +124,37 @@ function pDataCheck(pDatas) {
     }
     return true
 }
+
+
+function provincesAddLayer() {
+    var url = Flask.url_for("sysOption.provincesAdd")
+    layer_sysOpt = layer.open(
+        {
+            type: 2,
+            skin: 'layui-layer-rim',
+            title: "新增省市信息",
+            area: ['600px', '300px'],
+            content: url,
+            resize: true,
+            maxmin: true,
+            resizing: function(){
+                var height = ($("#layui-layer1").css("height"))
+                $("#layui-layer-iframe1").css({
+                    'height': (parseInt(height)-55)+"px"
+                })
+            },
+            full: function(){
+                var height = ($("#layui-layer1").css("height"))
+                $("#layui-layer-iframe1").css({
+                    'height': (parseInt(height)-55)+"px"
+                })
+            },
+            restore: function(){
+                var height = ($("#layui-layer1").css("height"))
+                $("#layui-layer-iframe1").css({
+                    'height': (parseInt(height)-55)+"px"
+                })
+            }
+        }
+    )
+}

@@ -46,7 +46,7 @@ def provincesView():
 
 
 @sysOption.route("/system/provinces/add", methods=['GET', 'POST'])
-def provinces():
+def provincesAdd():
     """
     新增行政区划视图
     :return:

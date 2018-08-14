@@ -106,7 +106,7 @@ ul.menu {
 }
 
 #content_layer {
-    padding: 10px;
+    
 }
 
 tr.provinces_trh > th,
@@ -146,4 +146,7 @@ table.p_fix_down > tbody > tr > td {
 .pTable {
     position: relative;
     height: 1000px;
+}
+.pPushButton {
+    margin-left: 20px;
 }
