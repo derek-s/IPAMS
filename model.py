@@ -13,9 +13,6 @@ from math import ceil
 import json
 
 
-limitNum = int(mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"])
-
-
 def init_idRecode():
     """
     初始化自定义自增id
@@ -50,18 +47,23 @@ def setLimit(limit=20):
     设置分页参数
     :param limit: int limit num
     :return: None
-    TODO: 需要修改一下更新方式，现在都是插入
     """
     limitDict = {
-        "limit": limit
+        "sysOption": "limitNum",
+        "limitNum": limit
     }
     try:
-        mongo.db.IPRMS_System.insert_one(limitDict)
+        limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})
+        if(not limitNum):
+            mongo.db.IPRMS_System.insert_one(limitDict)
+        else:
+            mongo.db.IPRMS_System.update_one({"sysOption": "limitNum"}, {"$set": {"limitNum": limit}})
         status = {
             "status": 1,
             "msg": "操作成功"
         }
-    except:
+    except Exception as e:
+        print(e)
         status = {
             "status": 0,
             "msg": "操作失败"
@@ -73,11 +75,10 @@ def getSystem():
     """
     取系统设置参数
     :return:  int limit num
-    TODO: 跟随setLimit函数同步修改
     """
     option = {}
     try:
-        limitNum = mongo.db.IPRMS_System.find_one()["limitNum"]
+        limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
         option["limitNum"] = int(limitNum)
     except Exception as e:
         print(e)
@@ -91,6 +92,12 @@ def setProvinces(ProvincesData):
     :return:
     """
     try:
+        ProvinceID = mongo.db.IPRMS_idRecode.find_one({"Collection_ID": "IPRMS_Provinces"})["id"]
+        print(ProvinceID)
+        for eachProvince in ProvincesData:
+            eachProvince["ID"] = ProvinceID
+            ProvinceID += 1
+        mongo.db.IPRMS_idRecode.update({"Collection_ID": "IPRMS_Provinces"}, {"$set": {"id": ProvinceID}})
         mongo.db.IPRMS_Provinces.insert_many(ProvincesData)
         status = {
             "status": 1,
@@ -110,6 +117,7 @@ def provincesViews():
     查看行政区划数据
     :return:
     """
+    limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
     try:
         provincesData = mongo.db.IPRMS_Provinces.find({})
         totalPNum = ceil(provincesData.count() / limitNum)
@@ -159,7 +167,8 @@ class Pagination:
                 last = num
 
 
-def paginate(queryset, page=1, per_page=limitNum):
+def paginate(queryset, page=1):
+    per_page = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
     skip  = (page - 1)*per_page
     limit = per_page
 
