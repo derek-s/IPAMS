@@ -105,18 +105,15 @@ def setProvinces(ProvincesData):
     return json.dumps(status)
 
 
-def provincesViews(pageNum):
+def provincesViews():
     """
     查看行政区划数据
     :return:
     """
     try:
-        offset = (int(pageNum) - 1) * limitNum
-        provincesData = mongo.db.IPRMS_Provinces.find({}).sort("_id").limit(limitNum).skip(offset)
-        if(provincesData.count() > offset):
-            return provincesData
-        else:
-            return 0
+        provincesData = mongo.db.IPRMS_Provinces.find({})
+        totalPNum = ceil(provincesData.count() / limitNum)
+        return provincesData, totalPNum
     except Exception as e:
         print(e)
 
@@ -125,14 +122,45 @@ def getIPRes():
     pass
 
 
-def pagination(collectionName):
-    """
-    分页
-    :param collectionName:
-    :return:
-    """
+class Pagination:
+    def __init__(self, items, page, per_page, total_items):
+        self.items = items
+        self.page = page
+        self.per_page = per_page
+        self.total_items = total_items
+        self.num_pages = int(ceil(total_items / per_page))
 
-    col = str(collectionName)
-    total = mongo.db[col].count()
-    offset = list(range(1, ceil(total/limitNum) + 1))
-    return offset
+    @property
+    def has_next(self):
+        return self.page < self.num_pages
+
+    @property
+    def has_prev(self):
+        return self.page > 1
+
+    @property
+    def next_page(self):
+        return self.page + 1
+
+    @property
+    def prev_page(self):
+        return self.page - 1
+
+    def iter_pages(self, left_edge=2, left_current=2, right_current=5, right_edge=2):
+        last = 0
+        for num in range(1, self.num_pages + 1):
+            if num <= left_edge or \
+                    (num > self.page - left_current - 1 and \
+                     num < self.page + right_current) or \
+                    num > self.num_pages - right_edge:
+                if last + 1 != num:
+                    yield None
+                yield num
+                last = num
+
+
+def paginate(queryset, page=1, per_page=limitNum):
+    skip  = (page - 1)*per_page
+    limit = per_page
+
+    return Pagination(queryset.limit(limit).skip(skip), page=page, per_page=per_page, total_items=queryset.count())

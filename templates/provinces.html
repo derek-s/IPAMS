@@ -1,4 +1,4 @@
-{% extends "base.html" %}{% block title %}IPSAM{% endblock %}{% block content -%}{% include "nav.html" %}
+{% extends "base.html" %}{%import '_macros.html' as macros%}{% block title %}IPSAM{% endblock %}{% block content -%}{% include "nav.html" %}
 <div id="content">
     <div class="pTable">
         <div class="pTable_head">
@@ -35,9 +35,27 @@
                 </tbody>
             </table>
         </div>
-        <div>
-                {%if pagination%} {{macros.pagination_widget(pagination,'sysOption.provinces')}} {%endif%}
-            </div>
     </div>
+    <div class="clenfix"></div>
+    <div class="pagination">
+            {%if pagination%} {{macros.paginate(pagination,'sysOption.provincesView')}} {%endif%}
+        </div>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        $('.pTable').css({ 
+            'width':$('.pTable_body').css('width'),//获取子元素的宽度
+            'height':$('.pTable_body').css('height') //获取子元素的高度
+        });
+    })
+    $(function() {
+            $('#transfer').click(function() {
+                var page = $('#transfer_page').val();
+                window.location.href = "{{url_for('sysOption.provincesView')}}" + "?page=" + page;
+            })
+        })
+        
+</script>
+
 {%- endblock -%}

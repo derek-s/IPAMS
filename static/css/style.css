@@ -136,9 +136,14 @@ tr.provinces_trinput > td {
 .pTable_body {
     position: absolute;
     margin-top: 35px;
+    z-index: 999997
 }
 table.p_fixed > thead > tr > th,
 table.p_fix_down > tbody > tr > td {
     width: 25%;
     text-align: center;
+}
+.pTable {
+    position: relative;
+    height: 1000px;
 }

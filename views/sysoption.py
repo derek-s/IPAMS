@@ -7,7 +7,7 @@
 
 
 from flask import Blueprint, render_template, request, abort
-from model import getSystem, setLimit, setProvinces, provincesViews, pagination
+from model import getSystem, setLimit, setProvinces, provincesViews, paginate
 
 
 sysOption = Blueprint("sysOption", __name__)
@@ -36,9 +36,9 @@ def provincesView():
     """
     if(request.method == "GET"):
         pageNum = int(request.args.get("page", 1))
-        pDatas = provincesViews(pageNum)
-        if(pDatas):
-            return render_template("provinces.html", pDatas=pDatas)
+        pDatas, totalPNum = provincesViews()
+        if(pageNum <= totalPNum):
+            return render_template("provinces.html", pDatas=pDatas, pagination=paginate(pDatas, pageNum))
         else:
             abort(404)
     elif(request.method == "POST"):
@@ -48,7 +48,7 @@ def provincesView():
 @sysOption.route("/system/provinces/add", methods=['GET', 'POST'])
 def provinces():
     """
-    行政区划视图
+    新增行政区划视图
     :return:
     """
     if(request.method == "GET"):

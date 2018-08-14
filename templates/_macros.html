@@ -1,0 +1,33 @@
+{% macro paginate(pagination, destination, small=False) %}
+    {% if pagination.num_pages > 1 %}
+        <ul class="pagination {% if small %}pagination-sm{% endif %}" id="pagination">
+            <li {% if not pagination.has_prev %}class="disabled"{% endif %}>
+                <a href="{% if pagination.has_prev %}{{ url_for(destination) }}?page={{ pagination.prev_page }}{% else %}#{% endif %}">&laquo;</a>
+            </li>
+
+            {% for page in pagination.iter_pages() %}
+                {% if page %}
+                    {% if page == pagination.page %}
+                        <li {% if pagination.page == page %}class="active"{% endif %}>
+                            <a href="{{ url_for(destination) }}?page={{ page }}">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li>
+                            <a href="{{ url_for(destination) }}?page={{ page }}">{{ page }}</a>
+                        </li>
+                    {% endif %} 
+                {% else %}
+                <li class="disabled"><a href="#">&hellip;</a></li>
+                {% endif %}
+                {% endfor %}
+            <li {% if not pagination.has_next %}class="disabled"{% endif %}>
+                <a href="{% if pagination.has_next %}{{ url_for(destination) }}?page={{ pagination.next_page }}{% else %}#{% endif %}">&raquo;</a>
+            </li>
+            <li class="pull-right">
+                <label for="transfer_page">跳转到:</label>
+                <input type="text" class="text-info" size="3" id="transfer_page">
+                <button type="button" class="btn btn-primary btn-sm" id="transfer">Go</button>
+            </li>
+        </ul>
+    {% endif %}
+{% endmacro %}
