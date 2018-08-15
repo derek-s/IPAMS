@@ -82,7 +82,7 @@ ul.menu {
     margin-top: 5px;
     margin-bottom: 10px;
 }
-
+#content_w,
 #content {
     width: 1280px;
     margin: 0 auto;
@@ -120,25 +120,34 @@ tr.provinces_trinput > td {
     display: block;
     margin: 20px 0;
 }
+.ipres_fixed,
 .p_fixed {
     position: fixed;
-    width: 1280px;
     background: white;
     color: black;
+    width: 1280px;
+}
+
+.pTable {
+    width: 1280px;
 }
 .p_fix_down {
     padding-top: 20px;
-    width: 1280px;
+    
 }
+.ipResTable_head,
 .pTable_head {
     display: block;
     position: absolute;
+    width: 1280px;
     z-index: 999998;
 }
+.ipResTable_body,
 .pTable_body {
     position: absolute;
+    width: 1280px;
     margin-top: 35px;
-    z-index: 999997
+    z-index: 999997;
 }
 table.p_fixed > thead > tr > th,
 table.p_fix_down > tbody > tr > td {
@@ -224,4 +233,21 @@ tr.inside_Line > td {
 tr.bottom {
     display: block; 
     padding-bottom: 20px;
+}
+#id_ipres{
+    border: 1px solid #aaa;
+    width: 100%;
+    padding: 2px 2px;
+    margin-top: 5px;
+}
+.buttonLinue {
+    margin-bottom: 10px
+}
+#content_w,
+.ipres_fixed,
+.ipResTable,
+.ipres_fix_down,
+.ipResTable_head,
+.ipResTable_body{
+    width: 1600px !important
 }

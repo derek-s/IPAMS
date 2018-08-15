@@ -1,8 +1,7 @@
-{% extends "base.html" %}{% block title %}IPRMS{% endblock %}
-{% block headScript %}
+{% extends "base.html" %}{% block title %}IPRMS{% endblock %} {% block headScript %}
 <script type="text/javascript">
-    $(function(){
-        $("select#select_city").each(function(){
+    $(function () {
+        $("select#select_city").each(function () {
             var City = $(this).val()
             var Provinces = $(this).parent().siblings().children("#select_provinces")
             Provinces.trigger("change")
@@ -10,87 +9,81 @@
         })
     })
 </script>
-{% endblock %}
-{% block content -%}
+{% endblock %} {% block content -%}
 <div id="content_layer">
     <div id="ipres_block">
         <table id="ipres_table">
             <tbody>
+                {% for ipres in ipResDatas %}
                 <tr class="ipres_ntr">
                     <td class="ipres_ntd">
                         <table class="ipres_nLine">
                             <tbody>
-                                {% for ipres in ipResDatas %}
-                                <tr class="ipres_trinput">
-                                        <tr class="ipres_trh">
-                                                <th>ID</th>
-                                                <th>IP来源单位</th>
-                                                <th>起始IP地址</th>
-                                                <th>终止IP地址</th>
-                                                <th>所属省份</th>
-                                                <th>所属市州</th>
-                                                <th>所属机房</th>
-                                            </tr>
-                                    <tr class="fLine">
+                                <tr class="ipres_trh">
+                                    <th>ID</th>
+                                    <th>IP来源单位</th>
+                                    <th>起始IP地址</th>
+                                    <th>终止IP地址</th>
+                                    <th>所属省份</th>
+                                    <th>所属市州</th>
+                                </tr>
+                                <tr class="fLine">
+                                    <td>
+                                        <label id="id_ipres">{{ ipres.ID }}</label>
+                                    </td>
+                                    <td>
+                                        <input style="width: 350px" type="text" id="input_ipsource" value="{{ ipres.ipSource }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="input_startip" value="{{ ipres.ipStart }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="input_endip" value="{{ ipres.ipEnd }}">
+                                    </td>
+                                    <td>
+                                        <select name="ipres_PvsName" id="select_provinces">
+                                            <option value="Pvs_Null">请选择省份</option>
+                                            {%- for pName in Provinces %} {% if ipres.Provinces == pName%}
+                                            <option value="{{ pName }}" selected="selected">{{ pName }}</option>
+                                            {% else %}
+                                            <option value="{{ pName }}">{{ pName }}</option>
+                                            {% endif %} {% endfor %}
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="campus" id="select_city">
+                                            <option value="City_Null">请选择市州</option>
+                                            <option value="{{ ipres.City }}" selected="selected">{{ ipres.City }}</option>
+                                        </select>
+                                    </td>
+                                    
+                                </tr>
+                                <tr class="ipres_trh">
+                                    <th>所属机房</th>
+                                    <th>市州专线用户</th>
+                                    <th>专线用户使用IP地址</th>
+                                </tr>
+                                <tr class="fLine">
                                         <td>
-                                            <label class="PvsModifyInput" id="id_province">{{ ipres.ID }}</label>
-                                        </td>
-                                        <td>
-                                            <input style="width: 350px" type="text" id="input_ipsource" value="{{ ipres.ipSource }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" id="input_startip" value="{{ ipres.ipStart }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" id="input_endip" value="{{ ipres.ipEnd }}">
-                                        </td>
-                                        <td>
-                                            <select name="ipres_PvsName" id="select_provinces">
-                                                <option value="Pvs_Null">请选择省份</option>
-                                                {%- for pName in Provinces %} {% if ipres.Provinces == pName%}
-                                                <option value="{{ pName }}" selected="selected">{{ pName }}</option>
-                                                {% else %}
-                                                <option value="{{ pName }}">{{ pName }}</option>
-                                                {% endif %} {% endfor %}
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <select name="campus" id="select_city">
-                                                <option value="City_Null">请选择市州</option>
-                                                <option value="{{ ipres.City }}" selected="selected">{{ ipres.City }}</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" id="input_mroom" value="{{ ipres.ipEnd }}" value="{{ ipres.MRoom }}">
-                                        </td>
-                                    </tr>
-                                    <tr class="sLine">
-                                        <tr class="ipres_trh">
-                                            <th></th>
-                                            <th>市州专线用户</th>
-                                            <th>专线用户使用IP地址</th>
-                                        </tr>
-                                        <tr class="inside_Line">
-                                            <td></td>
-                                            <td>
-                                                <input style="width: 350px" type="text" id="input_PVCTUser" value="{{ ipres.ipUser }}">
+                                                <input type="text" id="input_mroom" value="{{ ipres.MRoom }}">
                                             </td>
-                                            <td>
-                                                <input type="text" id="input_PVCTIP" value="{{ ipres.ipUsed }}">
-                                            </td>
-                                        </tr>
-                                    </tr>
+                                    <td>
+                                        <input style="width: 350px" type="text" id="input_PVCTUser" value="{{ ipres.ipUser }}">
+                                    </td>
+                                    <td>
+                                        <input type="text" id="input_PVCTIP" value="{{ ipres.ipUsed }}">
+                                    </td>
                                 </tr>
                                 <tr class="bottom"></tr>
-                                {% endfor %}
                             </tbody>
                         </table>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
         <div class="buttonLinue">
-            <button class="btn btn-primary pPushButton" onclick="javascript:#">修改数据</button>
+            <button class="btn btn-primary pPushButton" onclick="javascript:ipres_GetDataModify()">修改数据</button>
         </div>
 
     </div>

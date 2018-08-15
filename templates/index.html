@@ -1,14 +1,13 @@
 {% extends "base.html" %}{% block title %}IPRMS{% endblock %}{% block content -%}{% include "nav.html" %}
-<div id="content">
+<div id="content_w">
     {% include "table.html" %}
 </div>
 <script type="text/javascript">
     $(function () {
-            $('.pTable').css({
-                'width': $('.pTable_body').css('width'),
-                'height': $('.pTable_body').css('height')
+            $('.ipResTable').css({
+                'height': $('.ipResTable_body').css('height')
             });
-            var height = parseInt($('.pTable').css("height")) + 50 + "px"
+            var height = parseInt($('.ipResTable').css("height")) + 50 + "px"
             $('.pUBlock').css({
                 'height': height
             });
