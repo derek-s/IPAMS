@@ -1,5 +1,5 @@
 {% macro paginate(pagination, destination, small=False) %}
-    {% if pagination.num_pages > 1 %}
+    {% if pagination.num_pages >= 1 %}
         <ul class="pagination {% if small %}pagination-sm{% endif %}" id="pagination">
             <li {% if not pagination.has_prev %}class="disabled"{% endif %}>
                 <a href="{% if pagination.has_prev %}{{ url_for(destination) }}?page={{ pagination.prev_page }}{% else %}#{% endif %}">&laquo;</a>

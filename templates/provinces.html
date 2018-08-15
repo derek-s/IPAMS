@@ -1,61 +1,83 @@
-{% extends "base.html" %}{%import '_macros.html' as macros%}{% block title %}IPSAM{% endblock %}{% block content -%}{% include "nav.html" %}
+{% extends "base.html" %}{%import '_macros.html' as macros%}{% block title %}IPRMS{% endblock %}{% block content -%}{% include
+"nav.html" %}
 <div id="content">
-    <div class="pTable">
-        <div class="pTable_head">
-            <table class="table table-hover p_fixed">
-                <thead>
-                    <tr>
-                        <th>
-                            <input id="checkboxall" type="checkbox" name="oper_all">
-                        </th>
-                        <th>
-                            省/直辖市/自治区
-                        </th>
-                        <th>
-                            地市州
-                        </th>
-                        <th>
-                            操作
-                        </th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-        <div class="pTable_body">
-            <table class="table table-hover p_fix_down">
-                <tbody>
-                    {% for pData in pDatas %}
-                    <tr>
-                        <td><input id="oper" type="checkbox" name="oper" value="1" /></td>
-                        <td>{{ pData.Provinces }}</td>
-                        <td>{{ pData.City }}</td>
-                        <td>管理 | 删除</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+    <div class="pUBlock">
+        <div class="pTable">
+            <div class="pTable_head">
+                <table class="table table-hover p_fixed">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input id="checkboxall" type="checkbox" name="oper_all">
+                            </th>
+                            <th>ID</th>
+                            <th>
+                                省/直辖市/自治区
+                            </th>
+                            <th>
+                                地市州
+                            </th>
+                            <th>
+                                操作
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="pTable_body">
+                <table class="table table-hover p_fix_down">
+                    <tbody>
+                        {% for pData in pDatas %}
+                        <tr>
+                            <td>
+                                <input id="oper-{{ pData.ID }}" type="checkbox" name="oper" value="{{ pData.ID }}" />
+                            </td>
+                            <td>{{ pData.ID }}</td>
+                            <td>{{ pData.Provinces }}</td>
+                            <td>{{ pData.City }}</td>
+                            <td><button onclick="javascript:Pvs_ModfiyLayer('{{ pData.ID }}', 'get')" type="button" class="btn btn-link inline_button_link">管理</button> | <button onclick="javascript:Pvs_Delete('{{ pData.ID }}')" type="button" class="btn btn-link inline_button_link">删除</button></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="clenfix"></div>
-    <div class="pagination">
+    <div class="bottomBar">
+        <div class="all_downlist">
+            <div class="dropdown">
+                <select id="OPSelect" name="action" id="bulk-action-selector-top">
+                    <option value="-1">批量操作</option>
+                    <option value="modify">管理</option>
+                    <option value="delete">删除</option>
+                </select>
+            </div>
+            <button onclick="javascript:Pvs_OP(getCheckBoxID())" id="iopearbutton" class="btn btn-primary">应用</button>
+        </div>
+        <div class="pagination">
             {%if pagination%} {{macros.paginate(pagination,'sysOption.provincesView')}} {%endif%}
         </div>
+    </div>
 </div>
 
 <script type="text/javascript">
-    $(function(){
-        $('.pTable').css({ 
-            'width':$('.pTable_body').css('width'),//获取子元素的宽度
-            'height':$('.pTable_body').css('height') //获取子元素的高度
+    $(function () {
+        $('.pTable').css({
+            'width': $('.pTable_body').css('width'),
+            'height': $('.pTable_body').css('height')
+        });
+        var height = parseInt($('.pTable').css("height")) + 50 + "px"
+        $('.pUBlock').css({
+            'height': height
         });
     })
-    $(function() {
-            $('#transfer').click(function() {
-                var page = $('#transfer_page').val();
-                window.location.href = "{{url_for('sysOption.provincesView')}}" + "?page=" + page;
-            })
+    $(function () {
+        $('#transfer').click(function () {
+            var page = $('#transfer_page').val();
+            window.location.href = "{{url_for('sysOption.provincesView')}}" + "?page=" + page;
         })
-        
+    })
 </script>
 
 {%- endblock -%}

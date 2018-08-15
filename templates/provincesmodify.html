@@ -8,28 +8,25 @@
                             <table class="provinces_nLine">
                                     <thead>
                                         <tr class="provinces_trh">
+                                            <th>序号</th>
                                             <th>省/直辖市/自治区</th>
                                             <th>地级市</th>
-                                            <th>操作</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="provinces_trinput">
+                                        {% for pData in pDatas %}
+                                        <tr class="provinces_modinput">
                                             <td>
-                                                <input type="text" id="input_province">
+                                                <label class="PvsModifyInput" id="id_province">{{ pData.ID }}</label>
                                             </td>
                                             <td>
-                                                <input type="text" id="input_city">
+                                                <input class="PvsModifyInput" type="text" id="input_province" value="{{ pData.Provinces }}">
                                             </td>
                                             <td>
-                                                <a class="addspan">
-                                                    <button class="glyphicon glyphicon-plus" aria-hidden="true" onclick="javascript:pCopy(this)"></button>
-                                                </a>
-                                                <a class="delspan">
-                                                    <button class="glyphicon glyphicon-minus" aria-hidden="true" onclick="javascript:pDel(this)"></button>
-                                                </a>
+                                                <input class="PvsModifyInput" type="text" id="input_city" value="{{ pData.City }}">
                                             </td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                     </td>
@@ -37,7 +34,7 @@
             </tbody>
         </table>
         <div class="buttonLinue">
-            <button class="btn btn-primary pPushButton" onclick="javascript:provincesPush()">添加数据</button>
+            <button class="btn btn-primary pPushButton" onclick="javascript:Pvs_GetDataModify()">修改数据</button>
         </div>
         
     </div>
