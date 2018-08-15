@@ -37,9 +37,14 @@ def provincesView():
     """
     if(request.method == "GET"):
         pageNum = int(request.args.get("page", 1))
-        pDatas, totalPNum = provincesViews()
+        pDatas, totalPNum, totalNum = provincesViews()
         if(pageNum <= totalPNum or totalPNum == 0):
-            return render_template("provinces.html", pDatas=pDatas, pagination=paginate(pDatas, pageNum))
+            return render_template(
+                "provinces.html",
+                pDatas=pDatas,
+                pagination=paginate(pDatas, pageNum),
+                totalNum=totalNum
+            )
         else:
             abort(404)
     elif(request.method == "POST"):

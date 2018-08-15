@@ -6,7 +6,10 @@
 # @File    : bgViews.py
 
 from model import init_idRecode, getID
-from flask import Blueprint
+from model import getCityName
+
+from flask import Blueprint, request
+
 
 
 bgViews = Blueprint("bgViews", __name__)
@@ -22,6 +25,8 @@ def initDBID():
     return idRecode_status
 
 
-@bgViews.route("/bg/_id")
-def getDBID():
-    return getID()
+@bgViews.route("/bg/_getCity", methods=['POST'])
+def getCity():
+    rData = request.get_json()
+    ProvinceName = rData["pName"]
+    return getCityName(ProvinceName)
