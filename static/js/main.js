@@ -14,12 +14,12 @@ $(document).ready(
             if ($("#checkboxall").prop("checked")) {
                 $("#checkboxall").prop("checked", false)
             }
-            var inputcount = $("input[name='oper']").length
+            var inputCount = $("input[name='oper']").length
             $("input[name='oper']").each(function () {
                 if ($(this).prop("checked")) {
                     check += 1
                 }
-                if (inputcount === check) {
+                if (inputCount === check) {
                     $("#checkboxall").prop("checked", true)
                 }
             })
@@ -33,6 +33,17 @@ $(document).ready(
                     xhr.setRequestHeader("X-CSRFToken", csrf_token)
                 }
             }
+        })
+
+        $(document).on("change", "select#select_provinces", function(){
+            var selectCity = $(this).parent().next().children()
+            if($(this).val() == "Pvs_Null"){
+                selectCity.empty()
+                selectCity.append('<option value="City_Null">请选择市州</option>')
+            } else {
+                selectCity.empty()
+            }
+            jsLoadCity($(this).val(), selectCity)
         })
     }
 )
@@ -98,36 +109,15 @@ function pDel(domObj) {
 }
 
 function provincesPush() {
-    var trList = $("td.provinces_ntd")
+    var tdList = $("td.provinces_ntd")
     var pDatas = []
-    trList.each(function(){
+    tdList.each(function(){
         var pData = {}
         pData["Provinces"] = $(this).find("input#input_province").val()
         pData["City"] = $(this).find("input#input_city").val()
         pDatas.push(pData)
     })
-    if(pDataCheck(pDatas)){
-        if(confirm('准备添加数据，是否继续？')){
-            $.ajax({
-                url: Flask.url_for('sysOption.provincesAdd'),
-                type: "post",
-                data: JSON.stringify(pDatas),
-                datatype: "json",
-                contentType: "application/json",
-                success: function(data){
-                    data = JSON.parse(data)
-                    if(data.status == 1){
-                        alert("添加成功")
-                        parent.layer.closeAll()
-                        parent.location.reload()
-                    }
-                    else{
-                        alert("添加失败")
-                    }
-                }
-            })
-        }
-    }
+    pushData(pDatas, "systemOption.provincesAdd")
 }
 
 function pDataCheck(pDatas) {
@@ -298,4 +288,112 @@ function Pvs_GetDataModify(){
     })
     console.log(PvsDataArray)
     Pvs_ModfiyLayer(PvsDataArray, "post")
+}
+
+function ipresPush(){
+    var tdList = $("td.ipres_ntd")
+    var ipDatas = []
+    tdList.each(function(){
+        var ipData = {}
+        ipData["ipSource"] = $(this).find("#input_ipsource").val()
+        ipData["ipStart"] = $(this).find("#input_startip").val()
+        ipData["ipEnd"] = $(this).find("#input_endip").val()
+        ipData["Provinces"] = $(this).find("#select_provinces").val()
+        ipData["City"] = $(this).find("#select_city").val()
+        ipData["MRoom"] = $(this).find("#input_mroom").val()
+        ipData["ipUser"] = $(this).find("#input_PVCTUser").val()
+        ipData["ipUsed"] = $(this).find("#input_PVCTIP").val()
+        ipDatas.push(ipData)
+    })
+    pushData(ipDatas, "IPRESViews.ipresAdd")
+}
+
+function IPPushAdd(domObj){
+    var base = $("table#ipres_table > tbody")
+    var oLineFind = $(domObj).parents("tr.ipres_ntr")
+    var ProvinceName = oLineFind.find("select#select_provinces").val()
+    var CityName = oLineFind.find("select#select_city").val()
+    var oCopyLine = oLineFind.clone()
+    oCopyLine.find("option[value = '" + ProvinceName + "']" ).attr("selected", "selected")
+    oCopyLine.find("option[value = '" + CityName + "']" ).attr("selected", "selected")
+    base.append(oCopyLine)
+}
+function IPPushDel(domObj){
+    if($("tr.ipres_ntr").length === 1){
+        alert("只有1行时不得删除")
+    }else{
+        $(domObj).parents("tr.ipres_ntr").remove()
+    }
+}
+
+function jsLoadCity(ProvinceName, nextCityDom){
+    var url = Flask.url_for("bgViews.getCity")
+    $.ajax({
+        async: false,
+        url: url,
+        data: JSON.stringify({"pName": ProvinceName}),
+        type: "post",
+        dataType: "json",
+        contentType: "application/json",
+        success: function(data){
+            var CityList = data["CityList"]
+            if(CityList.length != 0){
+                nextCityDom.append('<option value="City_Null">请选择市州</option>')
+                $.each(CityList, function(one){
+                    CityName = CityList[one]
+                    nextCityDom.append('<option value="' + CityName + '">' + CityName + '</option>')
+                })
+            }
+        }
+    })
+}
+
+function ipAddLayer(){
+    var url = Flask.url_for("IPRESViews.ipresAdd")
+    layer_ipAdd = layer.open({
+        id: "IPAddLayer",
+        type: 2,
+        area: ['1366px', '300px'],
+        skin: 'layui-layer-rim',
+        title: "添加IP",
+        content: url,
+        resize: true,
+            resizing: function(){
+                var height = ($(".layui-layer-rim").css("height"))
+                console.log(height)
+                $("#IPAddLayer > iframe").css({
+                    'height': (parseInt(height)-55)+"px"
+                })
+            }
+    })
+}
+
+function pushData(pDatas, URL){
+    url = Flask.url_for(URL)
+    if(pDataCheck(pDatas)){
+        if(confirm('准备添加数据，是否继续？')){
+            $.ajax({
+                url: url,
+                type: "post",
+                data: JSON.stringify(pDatas),
+                datatype: "json",
+                contentType: "application/json",
+                success: function(data){
+                    data = JSON.parse(data)
+                    if(data.status == 1){
+                        if(data.Count){
+                            alert("添加成功 共添加 " + data.Count + " 条数据")
+                        }else{
+                            alert("添加成功")
+                        }
+                        parent.layer.closeAll()
+                        parent.location.reload()
+                    }
+                    else{
+                        alert("添加失败")
+                    }
+                }
+            })
+        }
+    }
 }
