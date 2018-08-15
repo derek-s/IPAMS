@@ -190,24 +190,7 @@ function Pvs_Delete(idArray) {
     data = {
         "idArray" : idArray
     }
-    if(confirm("确认删除信息么？")){
-        $.ajax({
-            url: Flask.url_for('sysOption.provincesDelete'),
-            type: "POST",
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data){
-                if(data.status == 1){
-                    alert("删除成功 共删除 " + data.result + " 条记录")
-                    parent.location.reload()
-                }
-                else{
-                    alert("删除失败")
-                }
-            }
-        })
-    }
+    deleteData(data, "sysOption.provincesDelete")
 }
 
 
@@ -368,14 +351,14 @@ function ipAddLayer(){
     })
 }
 
-function pushData(pDatas, URL){
+function pushData(Datas, URL){
     url = Flask.url_for(URL)
-    if(pDataCheck(pDatas)){
+    if(pDataCheck(Datas)){
         if(confirm('准备添加数据，是否继续？')){
             $.ajax({
                 url: url,
                 type: "post",
-                data: JSON.stringify(pDatas),
+                data: JSON.stringify(Datas),
                 datatype: "json",
                 contentType: "application/json",
                 success: function(data){
@@ -395,5 +378,51 @@ function pushData(pDatas, URL){
                 }
             })
         }
+    }
+}
+
+function ipRes_OP(idArray){
+    if($("select#OPSelect").val() == "delete"){
+        if(isNull(idArray)){
+            alert("尚未选中任何需要操作的数据！")
+        }else{
+            ipRES_Delete(idArray)
+        }
+    }else if($("select#OPSelect").val() == "modify"){
+        if(isNull(idArray)){
+            alert("尚未选中任何需要操作的数据！")
+        }else{
+            // Pvs_ModfiyLayer(idArray, "get")
+        }
+    }
+}
+
+function ipRES_Delete(idArray){
+    data = {
+        "idArray" : idArray
+    }
+    deleteData(data, "IPRESViews.ipresDelete")
+}
+
+
+function deleteData(Datas, URL){
+    var url = Flask.url_for(URL)
+    if(confirm("确认删除信息么？")){
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: JSON.stringify(Datas),
+            dataType: "json",
+            contentType: "application/json",
+            success: function(data){
+                if(data.status == 1){
+                    alert("删除成功 共删除 " + data.result + " 条记录")
+                    parent.location.reload()
+                }
+                else{
+                    alert("删除失败")
+                }
+            }
+        })
     }
 }

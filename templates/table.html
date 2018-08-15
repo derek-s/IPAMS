@@ -40,7 +40,7 @@
                             <td style="width: 12%">{{ IP.ipUsed }}</td>
                             <td style="width: 8%">
                                 <button onclick="javascript:#" type="button" class="btn btn-link inline_button_link">管理</button> |
-                                <button onclick="javascript:#" type="button" class="btn btn-link inline_button_link">删除</button>
+                                <button onclick="javascript:ipRES_Delete('{{ IP.ID }}')" type="button" class="btn btn-link inline_button_link">删除</button>
                             </td>
                         </tr>
                         {% endfor %}
@@ -59,7 +59,7 @@
                     <option value="delete">删除</option>
                 </select>
             </div>
-            <button onclick="javascript:#" id="iopearbutton" class="btn btn-primary">应用</button>
+            <button onclick="javascript:ipRes_OP(getCheckBoxID())" id="iopearbutton" class="btn btn-primary">应用</button>
         </div>
         <div class="totalNum">
             <span>共计 {{ totalNum }} 条</span>

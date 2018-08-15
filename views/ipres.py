@@ -7,7 +7,7 @@
 
 
 from flask import render_template, url_for, request, Blueprint
-from model import getProvincesName, setIPResAdd
+from model import getProvincesName, setIPResAdd, delIP
 
 IPRESViews = Blueprint("IPRESViews", __name__)
 
@@ -21,3 +21,9 @@ def ipresAdd():
         ipDatas = request.get_json()
         result = setIPResAdd(ipDatas)
         return result
+
+
+@IPRESViews.route("/ipres/del", methods=['POST'])
+def ipresDelete():
+    idJson = request.get_json()
+    return delIP(idJson)
