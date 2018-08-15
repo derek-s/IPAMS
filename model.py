@@ -38,7 +38,7 @@ def getID():
     获取自定义ID的值
     :return:
     """
-    id = mongo.db.IPRMS_idRecode.find_one()["id"] + 1
+    id = mongo.db.IPRMS_idRecode.find_one({"Collection_ID": "IPRMS_IPRes"})["id"]
     return id
 
 
@@ -95,9 +95,11 @@ def setProvinces(ProvincesData):
             eachProvince["ID"] = ProvinceID
             ProvinceID += 1
         mongo.db.IPRMS_idRecode.update({"Collection_ID": "IPRMS_Provinces"}, {"$set": {"id": ProvinceID}})
-        mongo.db.IPRMS_Provinces.insert_many(ProvincesData)
+        addToDB = mongo.db.IPRMS_Provinces.insert_many(ProvincesData)
+        insertCount = len(addToDB.inserted_id)
         status = {
-            "status": 1
+            "status": 1,
+            "Count": insertCount
         }
     except Exception as e:
         print(e)
@@ -115,14 +117,11 @@ def provincesViews():
     limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
     try:
         provincesData = mongo.db.IPRMS_Provinces.find({})
-        totalPNum = ceil(provincesData.count() / limitNum)
-        return provincesData, totalPNum
+        totalNum = provincesData.count()
+        totalPNum = ceil(totalNum / limitNum)
+        return provincesData, totalPNum, totalNum
     except Exception as e:
         print(e)
-
-
-def getIPRes():
-    pass
 
 
 class Pagination:
@@ -256,3 +255,79 @@ def setProvicesModify(pDatas):
             "status": 0
         }
     return json.dumps(status)
+
+
+def getProvincesName():
+    """
+    省份名称获取
+    :return: 省份名称集合
+    """
+    PSet = set()
+    Provinces = mongo.db.IPRMS_Provinces.find({})
+    for i in Provinces:
+        PSet.add(i["Provinces"])
+    return PSet
+
+
+def getCityName(ProvinceName):
+    """
+    城市名称获取
+    :param ProvinceName: 省份名称
+    :return: 城市名称集合
+    """
+    CList = []
+    result = {}
+    Citys = mongo.db.IPRMS_Provinces.find({"Provinces": str(ProvinceName)})
+    for i in Citys:
+        CList.append(i["City"])
+    result["CityList"] = CList
+    return json.dumps(result)
+
+
+def setIPResAdd(IPResDatas):
+    """
+    添加IP资源到数据库
+    :param IPResDatas: IP数据
+    :return: 操作结果
+    """
+    try:
+        ID = getID()
+        insertCount = []
+        for eachIP in IPResDatas:
+            eachIP["ID"] = ID
+            ProvinceName = eachIP["Provinces"]
+            CityName = eachIP["City"]
+            Location = str(ProvinceName) + str(CityName)
+            del eachIP["Provinces"], eachIP["City"]
+            print(eachIP)
+            eachIP["Location"] = Location
+            addToDB = mongo.db.IPRMS_IPRes.insert_one(eachIP)
+            insertCount.append(addToDB.inserted_id)
+            ID += 1
+        mongo.db.IPRMS_idRecode.update_one({"Collection_ID": "IPRMS_IPRes"}, {"$set": {"id": ID}})
+        status = {
+            "status": 1,
+            "Count": len(insertCount)
+        }
+    except Exception as e:
+        print(e)
+        status = {
+            "status": 0
+        }
+    return json.dumps(status)
+
+
+def IPResViews():
+    """
+    首页前台视图
+    :return:
+    """
+    limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
+    try:
+        IPResData = mongo.db.IPRMS_IPRes.find({})
+        totalNum = IPResData.count()
+        totalPNum = ceil(totalNum / limitNum)
+        return IPResData, totalPNum, totalNum
+    except Exception as e:
+        print(e)
+
