@@ -59,14 +59,12 @@ def setLimit(limit=20):
         else:
             mongo.db.IPRMS_System.update_one({"sysOption": "limitNum"}, {"$set": {"limitNum": limit}})
         status = {
-            "status": 1,
-            "msg": "操作成功"
+            "status": 1
         }
     except Exception as e:
         print(e)
         status = {
-            "status": 0,
-            "msg": "操作失败"
+            "status": 0
         }
     return json.dumps(status)
 
@@ -93,21 +91,18 @@ def setProvinces(ProvincesData):
     """
     try:
         ProvinceID = mongo.db.IPRMS_idRecode.find_one({"Collection_ID": "IPRMS_Provinces"})["id"]
-        print(ProvinceID)
         for eachProvince in ProvincesData:
             eachProvince["ID"] = ProvinceID
             ProvinceID += 1
         mongo.db.IPRMS_idRecode.update({"Collection_ID": "IPRMS_Provinces"}, {"$set": {"id": ProvinceID}})
         mongo.db.IPRMS_Provinces.insert_many(ProvincesData)
         status = {
-            "status": 1,
-            "msg": "操作成功"
+            "status": 1
         }
     except Exception as e:
         print(e)
         status = {
-            "status": 0,
-            "msg": "操作失败"
+            "status": 0
         }
     return json.dumps(status)
 
@@ -168,8 +163,96 @@ class Pagination:
 
 
 def paginate(queryset, page=1):
+    """
+    分页
+    :param queryset: 查询数据集
+    :param page: 页码
+    :return: 分页信息
+    """
     per_page = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
     skip  = (page - 1)*per_page
     limit = per_page
 
     return Pagination(queryset.limit(limit).skip(skip), page=page, per_page=per_page, total_items=queryset.count())
+
+
+def delProvinces(idList):
+    """
+    删除省市信息
+    :param idDict: 省市ID列表，也可传入str
+    :return: 操作结果
+    """
+    resultCount =0
+    idTempList = []
+    idLists = idList["idArray"]
+    if(isinstance(idLists, str)):
+        idTempList.append(idLists)
+        idLists = idTempList
+    try:
+        for eachID in idLists:
+            result = mongo.db.IPRMS_Provinces.delete_one({"ID": int(eachID)})
+            resultCount += result.deleted_count
+        status = {
+            "status": 1,
+            "result": resultCount
+        }
+    except Exception as e:
+        print(e)
+        status = {
+            "status": 0
+        }
+    return json.dumps(status)
+
+
+def getProvicesModify(idList):
+    """
+    管理省市信息
+    :param idList: 省市ID列表，也可传入str
+    :return: 前端查询集
+    """
+    idTempList = []
+    idLists = idList["idArray"]
+    if (isinstance(idLists, str)):
+        idTempList.append(idLists)
+        idLists = idTempList
+    result = []
+    try:
+        for eachID in idLists:
+            selectResult = mongo.db.IPRMS_Provinces.find_one({"ID": int(eachID)})
+            dictResult = {
+                "ID": selectResult["ID"],
+                "Provinces": selectResult["Provinces"],
+                "City": selectResult["City"]
+            }
+            result.append(dictResult)
+    except Exception as e:
+        print(e)
+
+    return result
+
+
+def setProvicesModify(pDatas):
+    """
+    修改省市信息
+    :param pDatas: 被修改ID，新数据List
+    :return: 操作结果
+    """
+    resultUpdateCount = 0
+    newData = pDatas["idArray"]
+    try:
+        for eachOne in newData:
+            PvsID = eachOne["ID"]
+            Provinces = eachOne["Provinces"]
+            City = eachOne["City"]
+            resultUpdate = mongo.db.IPRMS_Provinces.update_one({"ID": int(PvsID)}, {"$set": {"Provinces": Provinces, "City": City}})
+            resultUpdateCount += resultUpdate.modified_count
+        status = {
+            "status": 1,
+            "UpdateCount": resultUpdateCount
+        }
+    except Exception as e:
+        print(e)
+        status = {
+            "status": 0
+        }
+    return json.dumps(status)

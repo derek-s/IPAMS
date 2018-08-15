@@ -8,6 +8,7 @@
 
 from flask import Blueprint, render_template, request, abort
 from model import getSystem, setLimit, setProvinces, provincesViews, paginate
+from model import delProvinces, getProvicesModify, setProvicesModify
 
 
 sysOption = Blueprint("sysOption", __name__)
@@ -37,7 +38,7 @@ def provincesView():
     if(request.method == "GET"):
         pageNum = int(request.args.get("page", 1))
         pDatas, totalPNum = provincesViews()
-        if(pageNum <= totalPNum):
+        if(pageNum <= totalPNum or totalPNum == 0):
             return render_template("provinces.html", pDatas=pDatas, pagination=paginate(pDatas, pageNum))
         else:
             abort(404)
@@ -57,3 +58,27 @@ def provincesAdd():
         pData = request.get_json()
         return setProvinces(pData)
 
+
+@sysOption.route("/system/provinces/del", methods=['POST'])
+def provincesDelete():
+    """
+    删除行政区划视图
+    :return:
+    """
+    idJson = request.get_json()
+    return delProvinces(idJson)
+
+
+@sysOption.route("/system/provinces/modify", methods=['POST'])
+def provincesModify():
+    """
+    编辑行政区划
+    :return:
+    """
+    pData = request.get_json()
+    op = pData["op"]
+    if(op == 'get'):
+        rawPData = getProvicesModify(pData)
+        return render_template("provincesmodify.html", pDatas=rawPData)
+    elif(op == "post"):
+        return setProvicesModify(pData)
