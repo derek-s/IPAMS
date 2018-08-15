@@ -219,7 +219,6 @@ function Pvs_ModfiyLayer(idArray, op){
                         resize: true,
                         resizing: function(){
                             var height = ($(".layui-layer-rim").css("height"))
-                            console.log(height)
                             $("#Pvs_ModifyLayer").css({
                                 'height': (parseInt(height)-55)+"px"
                             })
@@ -392,7 +391,7 @@ function ipRes_OP(idArray){
         if(isNull(idArray)){
             alert("尚未选中任何需要操作的数据！")
         }else{
-            // Pvs_ModfiyLayer(idArray, "get")
+            ipres_ModfiyLayer(idArray, "get")
         }
     }
 }
@@ -424,5 +423,69 @@ function deleteData(Datas, URL){
                 }
             }
         })
+    }
+}
+
+
+function ipres_ModfiyLayer(idArray, op){
+    url = Flask.url_for('IPRESViews.ipresModify')
+    if(op == "get"){
+        if(idArray){
+            var postArray = {
+                "op": "get",
+                "idArray": idArray
+            }
+            $.ajax({
+                url: url,
+                type: "post",
+                data: JSON.stringify(postArray),
+                contentType: "application/json",
+                dataType: "html",
+                success: function(html){
+                    layer.open({
+                        id: "ipRes_ModifyLayer",
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        title: '修改IP资源信息',
+                        area: ['1366px', '600px'],
+                        content: html,
+                        resize: true,
+                        resizing: function(){
+                            var height = ($(".layui-layer-rim").css("height"))
+                            $("#ipRes_ModifyLayer").css({
+                                'height': (parseInt(height)-55)+"px"
+                            })
+                        }
+                    })
+                }
+            })
+        }
+    }else if(op == "post"){
+        if(confirm("确定修改么？")){
+            if(idArray){
+                var PostArray = {
+                    "op": "post",
+                    "idArray": idArray
+                }
+                $.ajax({
+                    url: url,
+                    type: "post",
+                    data: JSON.stringify(PostArray),
+                    datatype: "json",
+                    contentType: "application/json",
+                    success: function(resp) {
+                        resp = JSON.parse(resp)
+                        if(resp.status == 1){
+                            alert("操作成功 共修改 " + resp.UpdateCount + " 条记录")
+                            parent.layer.closeAll()
+                            parent.location.reload()
+                        }
+                        else {
+                            alert("操作失败")
+                        }
+                    }
+                })
+            }
+        }
     }
 }
