@@ -5,6 +5,7 @@ body {
     font-size: 14px;
     height: 100%;
     display: block;
+    overflow-y: scroll
 }
 
 html {
@@ -50,10 +51,11 @@ span {
 
 .nav_Logo {
     color: #fff;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 600;
     display: block;
     float: left;
+    margin-top: 5px;
 }
 
 .nav_List {
@@ -111,7 +113,7 @@ ul.menu {
 
 tr.provinces_trh > th,
 tr.provinces_trinput > td {
-    padding: 0 20px;
+    padding: 0 10px;
 }
 
 .provinces_ntr {
@@ -140,7 +142,7 @@ tr.provinces_trinput > td {
 }
 table.p_fixed > thead > tr > th,
 table.p_fix_down > tbody > tr > td {
-    width: 25%;
+    width: 20%;
     text-align: center;
 }
 .pTable {
@@ -149,4 +151,49 @@ table.p_fix_down > tbody > tr > td {
 }
 .pPushButton {
     margin-left: 20px;
+}
+.pagination {
+    float: right;
+    margin: 0 !important
+}
+.pull-right {
+    margin-left: 20px;
+}
+#transfer_page {
+    line-height: 27px;
+}
+#transfer {
+    height: 33px;
+    vertical-align: top;
+}
+#Search_S{
+    line-height: 30px;
+    height: 35px;
+    vertical-align: middle;
+}
+.pUBlock {
+    display: block;
+    position: static;
+}
+.bottomBar{
+    margin-bottom: 40px;
+}
+.all_downlist {
+    display: inline-block;
+}
+.dropdown {
+    display: inline-block;
+}
+select#OPSelect {
+    height: 34px;
+    vertical-align: middle;
+}
+.inline_button_link {
+    padding: 0 !important;
+}
+.provinces_modinput {
+    text-align: center
+}
+.PvsModifyInput {
+    margin: 10px;
 }
