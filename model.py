@@ -298,8 +298,6 @@ def setIPResAdd(IPResDatas):
             ProvinceName = eachIP["Provinces"]
             CityName = eachIP["City"]
             Location = str(ProvinceName) + str(CityName)
-            del eachIP["Provinces"], eachIP["City"]
-            print(eachIP)
             eachIP["Location"] = Location
             addToDB = mongo.db.IPRMS_IPRes.insert_one(eachIP)
             insertCount.append(addToDB.inserted_id)
@@ -331,3 +329,29 @@ def IPResViews():
     except Exception as e:
         print(e)
 
+
+def delIP(idList):
+    """
+    删除IP数据
+    :return:
+    """
+    deleteRowsCount = 0
+    idTempList = []
+    idLists = idList["idArray"]
+    if (isinstance(idLists, str)):
+        idTempList.append(idLists)
+        idLists = idTempList
+    try:
+        for eachID in idLists:
+            selectResult = mongo.db.IPRMS_IPRes.delete_one({"ID": int(eachID)})
+            deleteRowsCount += selectResult.deleted_count
+            status = {
+                "status": 1,
+                "result": deleteRowsCount
+            }
+    except Exception as e:
+        print(e)
+        status = {
+            "status": 0
+        }
+    return json.dumps(status)
