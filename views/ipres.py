@@ -7,7 +7,7 @@
 
 
 from flask import render_template, url_for, request, Blueprint
-from model import getProvincesName, setIPResAdd, delIP, getIPResModify
+from model import getProvincesName, setIPResAdd, delIP, getIPResModify, setIPResModify
 
 IPRESViews = Blueprint("IPRESViews", __name__)
 
@@ -36,3 +36,5 @@ def ipresModify():
         rawData = getIPResModify(postJson)
         Provinces = getProvincesName()
         return render_template("ipresmodify.html", ipResDatas=rawData, Provinces=Provinces)
+    elif(op == "post"):
+        return setIPResModify(postJson)

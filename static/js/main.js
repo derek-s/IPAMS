@@ -148,7 +148,6 @@ function provincesAddLayer() {
             resize: true,
             resizing: function(){
                 var height = ($(".layui-layer-rim").css("height"))
-                console.log(height)
                 $("#Pvs_AddLayer > iframe").css({
                     'height': (parseInt(height)-55)+"px"
                 })
@@ -265,10 +264,8 @@ function Pvs_GetDataModify(){
         PvsData["ID"] = $(this).find("#id_province").text()
         PvsData["Provinces"] = $(this).find("#input_province").val()
         PvsData["City"] = $(this).find("#input_city").val()
-        console.log(PvsData)
         PvsDataArray.push(PvsData)
     })
-    console.log(PvsDataArray)
     Pvs_ModfiyLayer(PvsDataArray, "post")
 }
 
@@ -342,7 +339,6 @@ function ipAddLayer(){
         resize: true,
             resizing: function(){
                 var height = ($(".layui-layer-rim").css("height"))
-                console.log(height)
                 $("#IPAddLayer > iframe").css({
                     'height': (parseInt(height)-55)+"px"
                 })
@@ -488,4 +484,23 @@ function ipres_ModfiyLayer(idArray, op){
             }
         }
     }
+}
+
+function ipres_GetDataModify(){
+    var tdList = $("tr.ipres_ntr")
+    var ipDatas = []
+    tdList.each(function(){
+        var ipData = {}
+        ipData["ID"] = $(this).find("#id_ipres").text()
+        ipData["ipSource"] = $(this).find("#input_ipsource").val()
+        ipData["ipStart"] = $(this).find("#input_startip").val()
+        ipData["ipEnd"] = $(this).find("#input_endip").val()
+        ipData["Provinces"] = $(this).find("#select_provinces").val()
+        ipData["City"] = $(this).find("#select_city").val()
+        ipData["MRoom"] = $(this).find("#input_mroom").val()
+        ipData["ipUser"] = $(this).find("#input_PVCTUser").val()
+        ipData["ipUsed"] = $(this).find("#input_PVCTIP").val()
+        ipDatas.push(ipData)
+    })
+    ipres_ModfiyLayer(ipDatas, "post")
 }
