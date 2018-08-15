@@ -217,3 +217,11 @@ tr.inside_Line > td {
     display: inline;
     margin-left: 20px;
 }
+
+.inside_Line{
+    padding-bottom: 10px;
+}
+tr.bottom {
+    display: block; 
+    padding-bottom: 20px;
+}
