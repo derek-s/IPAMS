@@ -333,6 +333,7 @@ def IPResViews():
 def delIP(idList):
     """
     删除IP数据
+    :param idList: IP资源ID列表，也可传入str
     :return:
     """
     deleteRowsCount = 0
@@ -355,3 +356,37 @@ def delIP(idList):
             "status": 0
         }
     return json.dumps(status)
+
+
+def getIPResModify(idList):
+    """
+    管理IPRes资源
+    :param idList: IP资源ID列表
+    :return: 前端查询集
+    """
+    idTempList = []
+    idLists = idList["idArray"]
+    if (isinstance(idLists, str)):
+        idTempList.append(idLists)
+        idLists = idTempList
+    result = []
+    try:
+        for eachID in idLists:
+            selectResult = mongo.db.IPRMS_IPRes.find_one({"ID": int(eachID)})
+            dictResult = {
+                "ID": selectResult["ID"],
+                "ipSource": selectResult["ipSource"],
+                "ipStart": selectResult["ipStart"],
+                "ipEnd": selectResult["ipEnd"],
+                "Provinces": selectResult["Provinces"],
+                "City": selectResult["City"],
+                "MRoom": selectResult["MRoom"],
+                "ipUser": selectResult["ipUser"],
+                "ipUsed": selectResult["ipUsed"],
+            }
+            result.append(dictResult)
+
+    except Exception as e:
+        print(e)
+
+    return result
