@@ -6,7 +6,7 @@
             var City = $(this).val()
             var Provinces = $(this).parent().siblings().children("#select_provinces")
             Provinces.trigger("change")
-            console.log($(this).find("option[value = '" + City + "']").attr("selected", "selected"))
+            $(this).find("option[value = '" + City + "']").attr("selected", "selected")
         })
     })
 </script>
