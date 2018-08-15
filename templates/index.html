@@ -2,4 +2,22 @@
 <div id="content">
     {% include "table.html" %}
 </div>
+<script type="text/javascript">
+    $(function () {
+            $('.pTable').css({
+                'width': $('.pTable_body').css('width'),
+                'height': $('.pTable_body').css('height')
+            });
+            var height = parseInt($('.pTable').css("height")) + 50 + "px"
+            $('.pUBlock').css({
+                'height': height
+            });
+        })
+    $(function () {
+        $('#transfer').click(function () {
+            var page = $('#transfer_page').val();
+            window.location.href = "{{url_for('indexViews.indexPage')}}" + "?page=" + page;
+        })
+    })
+</script>
 {%- endblock -%}

@@ -1,31 +1,71 @@
+{%import '_macros.html' as macros%}
 <div class="resTable">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>序号</th>
-                <th>IP来源单位</th>
-                <th>起始IP地址</th>
-                <th>终止IP地址</th>
-                <th>所属市州</th>
-                <th>所属机房</th>
-                <th>市州专线用户</th>
-                <th>专线用户使用IP地址</th>
-                <th>操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td>四川省移动</td>
-                <td>123.123.123.123</td>
-                <td>123.123.123.123</td>
-                <td>四川省成都市</td>
-                <td></td>
-                <td>XXXX集团用户</td>
-                <td>123.123.123.123</td>
-                <td>管理|删除</td>
-            </tr>
-        </tbody>
-
-    </table>
+    <div class="pUBlock">
+        <div class="pTable">
+            <div class="pTable_head">
+                <table class="table table-hover p_fixed">
+                    <thead>
+                        <tr>
+                            <th style="width: 2%">
+                                <input id="checkboxall" type="checkbox" name="oper_all">
+                            </th>
+                            <th style="width: 3%">ID</th>
+                            <th style="width: 10%">IP来源单位</th>
+                            <th style="width: 10%">起始IP地址</th>
+                            <th style="width: 10%">终止IP地址</th>
+                            <th style="width: 10%">所属市州</th>
+                            <th style="width: 10%">所属机房</th>
+                            <th style="width: 25%">市州专线用户</th>
+                            <th style="width: 12%">专线用户使用IP地址</th>
+                            <th style="width: 8%">操作</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="pTable_body">
+                <table class="table table-hover p_fix_down">
+                    <tbody>
+                        {% for IP in IPRes %}
+                        <tr>
+                            <td style="width: 2%">
+                                <input id="oper-{{ IP.ID }}" type="checkbox" name="oper" value="{{ IP.ID }}" />
+                            </td>
+                            <td style="width: 3%">{{ IP.ID }}</td>
+                            <td style="width: 10%">{{ IP.ipSource }}</td>
+                            <td style="width: 10%">{{ IP.ipStart }}</td>
+                            <td style="width: 10%">{{ IP.ipEnd }}</td>
+                            <td style="width: 10%">{{ IP.Location }}</td>
+                            <td style="width: 10%">{{ IP.MRoom }}</td>
+                            <td style="width: 25%">{{ IP.ipUser }}</td>
+                            <td style="width: 12%">{{ IP.ipUsed }}</td>
+                            <td style="width: 8%">
+                                <button onclick="javascript:#" type="button" class="btn btn-link inline_button_link">管理</button> |
+                                <button onclick="javascript:#" type="button" class="btn btn-link inline_button_link">删除</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clenfix"></div>
+    <div class="bottomBar">
+        <div class="all_downlist">
+            <div class="dropdown">
+                <select id="OPSelect" name="action" id="bulk-action-selector-top">
+                    <option value="-1">批量操作</option>
+                    <option value="modify">管理</option>
+                    <option value="delete">删除</option>
+                </select>
+            </div>
+            <button onclick="javascript:#" id="iopearbutton" class="btn btn-primary">应用</button>
+        </div>
+        <div class="totalNum">
+            <span>共计 {{ totalNum }} 条</span>
+        </div>
+        <div class="pagination">
+            {%if pagination%} {{macros.paginate(pagination,'indexViews.indexPage')}} {%endif%}
+        </div>
+    </div>
 </div>

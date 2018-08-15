@@ -1,0 +1,85 @@
+{% extends "base.html" %}{% block title %}IPRMS{% endblock %}{% block content -%}
+<div id="content_layer">
+    <div id="ipres_block">
+        <table id="ipres_table">
+            <tbody>
+                <tr class="ipres_ntr">
+                    <td class="ipres_ntd">
+                        <table class="ipres_nLine">
+                            <thead>
+                                <tr class="ipres_trh">
+                                    <th>IP来源单位</th>
+                                    <th>起始IP地址</th>
+                                    <th>终止IP地址</th>
+                                    <th>所属省份</th>
+                                    <th>所属市州</th>
+                                    <th>所属机房</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="ipres_trinput">
+                                    <tr class="fLine">
+                                        <td>
+                                            <input style="width: 350px" type="text" id="input_ipsource">
+                                        </td>
+                                        <td>
+                                            <input type="text" id="input_startip">
+                                        </td>
+                                        <td>
+                                            <input type="text" id="input_endip">
+                                        </td>
+                                        <td>
+                                            <select name="ipres_PvsName" id="select_provinces">
+                                                <option value="Pvs_Null">请选择省份</option>
+                                                {%- for pName in pNames %}
+                                                <option value="{{ pName }}">{{ pName }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <select name="campus" id="select_city">
+                                                <option value="City_Null">请选择市州</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" id="input_mroom">
+                                        </td>
+                                    </tr>
+                                    <tr class="sLine">
+                                        <tr class="ipres_trh">
+                                            <th>市州专线用户</th>
+                                            <th>专线用户使用IP地址</th>
+                                            <th>操作</th>
+                                        </tr>
+                                        <tr class="inside_Line">
+                                            <td>
+                                                <input style="width: 350px" type="text" id="input_PVCTUser">
+                                            </td>
+                                            <td>
+                                                <input type="text" id="input_PVCTIP">
+                                            </td>
+                                            <td>
+                                                    <a class="addspan">
+                                                        <button class="glyphicon glyphicon-plus" aria-hidden="true" onclick="javascript:IPPushAdd(this)"></button>
+                                                    </a>
+                                                    <a class="delspan">
+                                                        <button class="glyphicon glyphicon-minus" aria-hidden="true" onclick="javascript:IPPushDel(this)"></button>
+                                                    </a>
+                                                </td>
+                                        </tr>
+                                    </tr>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="buttonLinue">
+            <button class="btn btn-primary pPushButton" onclick="javascript:ipresPush()">添加数据</button>
+        </div>
+
+    </div>
+</div>
+{%- endblock -%}

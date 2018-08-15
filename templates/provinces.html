@@ -55,6 +55,9 @@
             </div>
             <button onclick="javascript:Pvs_OP(getCheckBoxID())" id="iopearbutton" class="btn btn-primary">应用</button>
         </div>
+        <div class="totalNum">
+                <span>共计 {{ totalNum }} 条</span>
+            </div>
         <div class="pagination">
             {%if pagination%} {{macros.paginate(pagination,'sysOption.provincesView')}} {%endif%}
         </div>
