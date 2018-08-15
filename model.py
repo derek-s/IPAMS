@@ -390,3 +390,37 @@ def getIPResModify(idList):
         print(e)
 
     return result
+
+
+def setIPResModify(Datas):
+    """
+    修改IP资源信息
+    :param Datas: 数据集合
+    :return: 操作结果
+    """
+    resultUpdateCount = 0
+    newData = Datas["idArray"]
+    print(newData)
+    try:
+        for eachOne in newData:
+            ID = eachOne["ID"]
+            ProvinceName = eachOne["Provinces"]
+            CityName = eachOne["City"]
+            Location = str(ProvinceName) + str(CityName)
+            eachOne["Location"] = Location
+            del eachOne["ID"]
+            print(eachOne)
+            resultUpdate = mongo.db.IPRMS_IPRes.update_one(
+                {"ID": int(ID)},
+                {"$set": eachOne})
+            resultUpdateCount += resultUpdate.modified_count
+        status = {
+            "status": 1,
+            "UpdateCount": resultUpdateCount
+        }
+    except Exception as e:
+        print(e)
+        status = {
+            "status": 0
+        }
+    return json.dumps(status)
