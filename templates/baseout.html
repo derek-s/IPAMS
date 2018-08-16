@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    {{ JSGlue.include() }}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+    <script src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='layer/layer.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}" type="text/javascript"></script>
+    <script type=text/javascript>
+        var $SCRIPT_ROOT = {{request.script_root | tojson | safe}};
+        var $PATH_ROOT = {{request.path | tojson | safe}}
+        var csrf_token = "{{ csrf_token() }}"
+    </script>
+    {% block headScript%}{% endblock%}
+</head>
+
+<body>
+    <div id="main">
+            <div id="nav">
+                    <div class="nav_Block">
+                        <div class="nav_Logo"><a href="{{url_for('indexViews.indexPage')}}">IPRMS</a></div>
+                        {% block headNav %}{% endblock%}
+                        <div class="nav_List">
+                            <ul class="menu">
+                                <li class="nav_Child">
+                                    <form id="search" method="get" action="{{url_for('indexViews.Search')}}">
+                                    <label type="text" class="Search_label">
+                                        <input type="text" class="form-control" name="keyword" placeholder="输入关键字搜索">
+                                    </label>
+                                    <select name="mode" id="Search_S" class="" data-style="btn-primary selectTop" data-width="150px">
+                                        <option value="all" selected>模糊搜索</option>
+                                        <option value="IPSource">IP来源单位</option>
+                                        <option value="StartIP">起始IP</option>
+                                        <option value="EndIP">终止IP</option>
+                                        <option value="Address">所属地址</option>
+                                        <option value="mRoom">所属机房</option>
+                                        <option value="User">用户</option>
+                                        <option value="Provinces">所属省</option>
+                                        <option value="City">所属市州</option>
+                                    </select>
+                                    <button class="btn btn-default">搜索</button>
+                                </form></li>
+                                <li class="nav_Child"><a class="btn btn-default" href="javascript:ipAddLayer()">添加新IP</a></li>
+                                <li class="nav_Child">
+                                    <div id="funMenu" class="dropdown">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                            其他功能 <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                        <li><a href="#">导入CSV</a></li>
+                                        <li><a href="#">导出CSV</a></li>
+                                        <li><a href="javascript:systemOptionLayer()">系统设置</a></li>
+                                        <li><a href="javascript:provincesAddLayer()">新增省市信息</a></li>
+                                        <li><a href="{{ url_for('sysOption.provincesView')}}">管理省市信息</a></li>
+                                        </ul>
+                                    </div></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
