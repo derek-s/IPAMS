@@ -87,7 +87,7 @@ ul.menu {
     width: 1280px;
     margin: 0 auto;
     display: block;
-    padding-top: 65px;
+    padding-top: 25px;
 }
 
 #search {
@@ -250,4 +250,12 @@ tr.bottom {
 .ipResTable_head,
 .ipResTable_body{
     width: 1600px !important
+}
+.keyword{
+    display: inline-block;
+    margin: 13px 30px;
+    color: white;
+}
+.S_Model {
+    color: red;
 }
