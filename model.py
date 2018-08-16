@@ -6,8 +6,6 @@
 # @File    : model.py
 
 from app import mongo
-from flask_pymongo import DESCENDING
-
 
 from math import ceil
 import json
@@ -424,3 +422,47 @@ def setIPResModify(Datas):
             "status": 0
         }
     return json.dumps(status)
+
+
+def searchAll(keyword):
+    """
+    模糊搜索
+    :param keyword: 搜索关键字
+    :return: 查询集
+    """
+    limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
+    try:
+        SerachResult = mongo.db.IPRMS_IPRes.find({"$or": [
+            {"ipSource": {"$regex": str(keyword)}},
+            {"ipStart": {"$regex": str(keyword)}},
+            {"ipEnd": {"$regex": str(keyword)}},
+            {"Provinces": {"$regex": str(keyword)}},
+            {"Location": {"$regex": str(keyword)}},
+            {"City": {"$regex": str(keyword)}},
+            {"MRoom": {"$regex": str(keyword)}},
+            {"ipUser": {"$regex": str(keyword)}},
+            {"ipUsed": {"$regex": str(keyword)}},
+        ]})
+        totalNum = SerachResult.count()
+        totalPNum = ceil(totalNum / limitNum)
+        return SerachResult, totalPNum, totalNum
+    except Exception as e:
+        print(e)
+
+
+def serachPrecise(keyword, field):
+    """
+    精确查询模式
+    :param keyword: 搜索关键字
+    :param field: 字段
+    :return: 查询集
+    """
+    limitNum = mongo.db.IPRMS_System.find_one({"sysOption": "limitNum"})["limitNum"]
+    try:
+        SerachResult = mongo.db.IPRMS_IPRes.find({field: str(keyword)})
+        totalNum = SerachResult.count()
+        totalPNum = ceil(totalNum / limitNum)
+        return SerachResult, totalPNum, totalNum
+    except Exception as e:
+        print(e)
+
