@@ -108,7 +108,7 @@ ul.menu {
 }
 
 #content_layer {
-    
+    padding: 15px
 }
 
 tr.provinces_trh > th,
@@ -258,4 +258,25 @@ tr.bottom {
 }
 .S_Model {
     color: red;
+}
+.upload {
+    margin-top: 50px;
+}
+.fileNameSpan {
+    padding-left: 15px;
+}
+.fCButton {
+    margin: 40px 0 1px 0;
+    width: 200px;
+    display: block;
+}
+.sr-only {
+    position: static !important;
+}
+#importStatus {
+    display: none;
+}
+.fNameUl {
+    list-style: none;
+    padding: 0;
 }
