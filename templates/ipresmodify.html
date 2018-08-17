@@ -1,15 +1,4 @@
-{% extends "baseout.html" %}{% block title %}IPRMS{% endblock %} {% block headScript %}
-<script type="text/javascript">
-    $(function () {
-        $("select#select_city").each(function () {
-            var City = $(this).val()
-            var Provinces = $(this).parent().siblings().children("#select_provinces")
-            Provinces.trigger("change")
-            $(this).find("option[value = '" + City + "']").attr("selected", "selected")
-        })
-    })
-</script>
-{% endblock %} {% block content -%}
+{% block content -%}
 <div id="content_layer">
     <div id="ipres_block">
         <table id="ipres_table">
@@ -89,3 +78,13 @@
     </div>
 </div>
 {%- endblock -%}
+<script type="text/javascript">
+    $(function () {
+        $("select#select_city").each(function () {
+            var City = $(this).val()
+            var Provinces = $(this).parent().siblings().children("#select_provinces")
+            Provinces.trigger("change")
+            $(this).find("option[value = '" + City + "']").attr("selected", "selected")
+        })
+    })
+</script>
