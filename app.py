@@ -7,19 +7,24 @@
 
 from flask import Flask
 from flask_bootstrap import Bootstrap
-from jinja2.ext import do
-from jinja2 import Environment
 from flask_wtf.csrf import CSRFProtect
 from flask_jsglue import JSGlue
 from flask_pymongo import PyMongo
 from config import SECRET_KEY, dbConfig
+import os
 
+from concurrent.futures import ThreadPoolExecutor
+
+executor = ThreadPoolExecutor(2)
 
 app = Flask(__name__, template_folder="templates")
 app.secret_key = SECRET_KEY
 
 app.config.update(
-    MONGO_URI=dbConfig["URI"]
+    MONGO_URI=dbConfig["URI"],
+    UPLOAD_FOLDER = os.getcwd() + '/uploads',
+    ALLOWED_EXTENSIONS = set(['csv']),
+    DEBUG=True
 )
 
 

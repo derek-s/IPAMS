@@ -11,6 +11,10 @@ from views.bgviews import bgViews
 from views.sysoption import sysOption
 from views.ipres import IPRESViews
 
+#from gevent import monkey
+#from gevent.pywsgi import WSGIServer
+#monkey.patch_all()
+
 app.register_blueprint(bgViews)
 app.register_blueprint(indexViews)
 app.register_blueprint(sysOption)
@@ -19,3 +23,5 @@ app.register_blueprint(IPRESViews)
 
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=5000, debug=True)
+    # httpServer = WSGIServer(("127.0.0.1", 5000), app)
+    # httpServer.serve_forever()
