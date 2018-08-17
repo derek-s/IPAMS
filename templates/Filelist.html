@@ -1,0 +1,14 @@
+<div id="content_layer">
+
+    <ul class="fNameUl"">
+        {% for eachName in FileList %}
+        <li>
+            <input class="fileChose" type="radio" value="{{ eachName }}">
+            <span class="fileNameSpan">{{ eachName }}</span>
+        </li>
+        {% endfor%}
+    </ul>
+
+
+    <button class="btn btn-default fCButton" onclick="javascript:FileChose()">确定</button>
+</div>
