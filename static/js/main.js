@@ -194,7 +194,7 @@ function Pvs_Delete(idArray) {
 
 
 function Pvs_ModfiyLayer(idArray, op){
-    url = Flask.url_for('sysOption.provincesModify')
+    var url = Flask.url_for('sysOption.provincesModify')
     if(op == "get"){
         if(idArray){
             var postArray = {
@@ -347,7 +347,7 @@ function ipAddLayer(){
 }
 
 function pushData(Datas, URL){
-    url = Flask.url_for(URL)
+    var url = Flask.url_for(URL)
     if(pDataCheck(Datas)){
         if(confirm('准备添加数据，是否继续？')){
             $.ajax({
@@ -424,7 +424,7 @@ function deleteData(Datas, URL){
 
 
 function ipres_ModfiyLayer(idArray, op){
-    url = Flask.url_for('IPRESViews.ipresModify')
+    var url = Flask.url_for('IPRESViews.ipresModify')
     if(op == "get"){
         if(idArray){
             var postArray = {
@@ -503,4 +503,90 @@ function ipres_GetDataModify(){
         ipDatas.push(ipData)
     })
     ipres_ModfiyLayer(ipDatas, "post")
+}
+
+
+function importFileChose(){
+    var url = Flask.url_for("indexViews.getFileList")
+    $.ajax({
+        url: url,
+        type: "post",
+        data: "",
+        dataType: "html",
+        success: function(html){
+            layer.open({
+                id: "FileChose",
+                type: 1,
+                skin: 'layui-layer-rim',
+                title: "选择要导入的文件",
+                area: ['600px', '300px'],
+                content: html,
+                resize: true,
+                resizing: function(){
+                    var height = ($(".layui-layer-rim").css("height"))
+                    $("#FileChose").css({
+                        'height': (parseInt(height)-55)+"px"
+                    })
+                }
+            })
+        }
+    })
+}
+
+function FileChose(){
+    $("span.fName").text("")
+    $("#importStart").attr("disabled", "disabled")
+    var fileName = $("input.fileChose:checked").val()
+    parent.layer.closeAll()
+    if(fileName){
+        $("span.fName").prepend(fileName)
+        $("#importStart").removeAttr("disabled")
+    }
+}
+
+function importStart(){
+    var url = Flask.url_for("indexViews.importStart")
+    $("#importStatus").css("display", "block")
+    var filename = $(".fName").text()
+    var data = {
+        "fileName": filename
+    }
+    $.ajax({
+        url: url,
+        type: "post",
+        data: JSON.stringify(data),
+        dataType: "JSON",
+        contentType: "application/json",
+        success: function(resp){
+            if(resp.status == 1){
+                timer = window.setInterval(
+                    function(){
+                        getImportStatus(resp.taskid)
+                    }, 1000
+                )
+            }
+        }
+    })
+    
+}
+
+function getImportStatus(taskid){
+    var url = Flask.url_for("indexViews.getStatus")
+    var data = {
+        "taskid": taskid
+    }
+    $.ajax({
+        url: url,
+        type: "post",
+        data: JSON.stringify(data),
+        dataType: "JSON",
+        contentType: "application/json",
+        success: function(resp){
+            console.log(resp)
+            if(resp.progress == 100){
+                clearInterval(timer)
+            }
+
+        }
+    })
 }
