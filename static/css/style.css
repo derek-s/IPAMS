@@ -87,7 +87,12 @@ ul.menu {
     width: 1280px;
     margin: 0 auto;
     display: block;
+}
+#content {
     padding-top: 25px;
+}
+#content_w {
+    padding-top: 18px;
 }
 
 #search {
@@ -279,4 +284,11 @@ tr.bottom {
 .fNameUl {
     list-style: none;
     padding: 0;
+}
+div.status {
+    display: grid;
+    line-height: 25px;
+}
+.span_status {
+    margin-left: 10px;
 }

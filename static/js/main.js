@@ -582,11 +582,22 @@ function getImportStatus(taskid){
         dataType: "JSON",
         contentType: "application/json",
         success: function(resp){
-            console.log(resp)
+            if(resp.status == 1){
+                $("#span_statusinfo").text("正在导入，请勿关闭窗口")
+            }
+            var progressP = resp.progress + "%"
+            $("#importPBar").css("width", progressP)
+            $("#importPBar").attr("aria-valuenow", resp.progress)
+            $(".sr-only").text(resp.progress + "% 完成")
+            $("#span_totalNum").text(resp.totalRow)
+            $("#span_importProg").text(resp.progress + "%")
+            $("#span_importNum").text(resp.countNum)
+            $("#span_errorNum").text(resp.errorCount)
+            $("#span_errorIDs").text(resp.errorRowIDs)
             if(resp.progress == 100){
                 clearInterval(timer)
+                $("#span_statusinfo").text("导入完成")
             }
-
         }
     })
 }
