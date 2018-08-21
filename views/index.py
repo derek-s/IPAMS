@@ -5,11 +5,13 @@
 # @Site    : 
 # @File    : index.py
 
-from flask import render_template, request, Blueprint, abort
+from flask import render_template, request, Blueprint, abort, redirect, url_for
 from model import IPResViews, paginate, searchAll
 from search import search
 from upload import checkFileName, ListfileName, importCSVToDB, createUID
 from importCSV import getTaskStatus
+from initapp import createCollections, checkInit, loadProvincesData
+
 from app import app, executor
 import os
 import json
@@ -17,22 +19,27 @@ import json
 
 indexViews = Blueprint("indexViews", __name__)
 
+
 @indexViews.route("/")
 def indexPage():
-    if (request.method == "GET"):
-        pageNum = int(request.args.get("page", 1))
-        IPResData, totalPNum, totalNum = IPResViews()
-        if (pageNum <= totalPNum or totalPNum == 0):
-            return render_template(
-                "index.html",
-                IPRes=IPResData,
-                pagination=paginate(IPResData, pageNum),
-                totalNum=totalNum
-            )
-        else:
-            abort(404)
-    elif (request.method == "POST"):
-        abort(400)
+    if(checkInit()):
+        if (request.method == "GET"):
+            pageNum = int(request.args.get("page", 1))
+            IPResData, totalPNum, totalNum = IPResViews()
+            if (pageNum <= totalPNum or totalPNum == 0):
+                return render_template(
+                    "index.html",
+                    IPRes=IPResData,
+                    pagination=paginate(IPResData, pageNum),
+                    totalNum=totalNum
+                )
+            else:
+                abort(404)
+        elif (request.method == "POST"):
+            abort(400)
+    else:
+        return redirect(url_for("indexViews.initAPP"))
+
 
 @indexViews.route("/serach")
 def Search():
@@ -84,6 +91,7 @@ def Search():
     else:
         abort(404)
 
+
 @indexViews.route("/upload", methods=["GET", "POST"])
 def uploadCSV():
     """
@@ -97,9 +105,9 @@ def uploadCSV():
         print(file)
         if(file and checkFileName(file.filename)):
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
-            return "上传完成"
+            return render_template("jump.html", info="上传完成", url="indexViews.uploadCSV")
         else:
-            return "未选择文件或文件名不符合规定"
+            return render_template("jump.html", info="未选择文件或文件名不符合规定", url="indexViews.uploadCSV")
 
 
 @indexViews.route("/upload/getFileList", methods=["GET","POST"])
@@ -110,6 +118,7 @@ def getFileList():
     """
     FileList = ListfileName(app.config["UPLOAD_FOLDER"])
     return render_template("Filelist.html", FileList=FileList)
+
 
 @indexViews.route("/upload/start", methods=["POST"])
 def importStart():
@@ -127,9 +136,29 @@ def importStart():
     }
     return json.dumps(status)
 
+
 @indexViews.route("/upload/status", methods=["POST"])
 def getStatus():
+    """
+    查询状态
+    :return:
+    """
     jsonDatas = request.get_json()
     taskid = jsonDatas["taskid"]
     result = getTaskStatus(taskid)
     return result
+
+
+@indexViews.route("/_init", methods=["GET"])
+def initAPP():
+    """
+    初始化应用
+    :return:
+    """
+    checkResult = checkInit()
+    if(checkResult == 0):
+        ccRsult = createCollections()
+        loadProvincesData()
+        if(ccRsult == 1):
+            return render_template("jump.html", info="初始化完成", url="indexViews.indexPage")
+    return render_template("jump.html", info="已进行初始化", url="indexViews.indexPage")
