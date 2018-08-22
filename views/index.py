@@ -102,7 +102,6 @@ def uploadCSV():
         return render_template("upload.html")
     elif(request.method == "POST"):
         file = request.files['file']
-        print(file)
         if(file and checkFileName(file.filename)):
             file.save(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
             return render_template("jump.html", info="上传完成", url="indexViews.uploadCSV")

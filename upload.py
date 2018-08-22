@@ -20,9 +20,7 @@ def checkFileName(filename):
     :return:
     """
     FileName = secure_filename(filename)
-    print(FileName)
     if(FileName.split(".", 1)[1] in ("csv")):
-        print(FileName)
         return True
 
 

@@ -398,7 +398,6 @@ def setIPResModify(Datas):
     """
     resultUpdateCount = 0
     newData = Datas["idArray"]
-    print(newData)
     try:
         for eachOne in newData:
             ID = eachOne["ID"]
@@ -407,7 +406,6 @@ def setIPResModify(Datas):
             Location = str(ProvinceName) + str(CityName)
             eachOne["Location"] = Location
             del eachOne["ID"]
-            print(eachOne)
             resultUpdate = mongo.db.IPRMS_IPRes.update_one(
                 {"ID": int(ID)},
                 {"$set": eachOne})
