@@ -1,0 +1,6 @@
+Werkzeug==0.14.1
+Flask_PyMongo==2.0.1
+Flask_JSGlue==0.3.1
+Flask_Bootstrap==3.3.7.1
+Flask==0.12.2
+Flask_WTF==0.14.2
