@@ -39,8 +39,8 @@
                             <td style="width: 25%">{{ IP.ipUser }}</td>
                             <td style="width: 12%">{{ IP.ipUsed }}</td>
                             <td style="width: 8%">
-                                <button onclick="javascript:ipres_ModfiyLayer('{{ IP.ID }}', 'get')" type="button" class="btn btn-link inline_button_link">管理</button> |
-                                <button onclick="javascript:ipRES_Delete('{{ IP.ID }}')" type="button" class="btn btn-link inline_button_link">删除</button>
+                                <button onclick="javascript:ipres_ModfiyLayer('{{ IP.ID }}', 'get')" type="button" class="btn btn-primary btn-small">管理</button> |
+                                <button onclick="javascript:ipRES_Delete('{{ IP.ID }}')" type="button" class="btn btn-danger btn-small">删除</button>
                             </td>
                         </tr>
                         {% endfor %}

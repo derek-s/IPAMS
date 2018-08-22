@@ -292,3 +292,7 @@ div.status {
 .span_status {
     margin-left: 10px;
 }
+.btn-small {
+    padding: 5px;
+    font-size: 12px;
+}
